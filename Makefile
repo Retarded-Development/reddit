@@ -17,3 +17,6 @@ reset_db:
 generate_test_data:
 	python manage.py migrate 
 	python manage.py runscript generate_test_data -v3
+
+show_urls:
+	python manage.py show_urls
