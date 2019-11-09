@@ -3,6 +3,8 @@
 ```
 pip install poetry
 poetry install
+cd reeddit
+npm install
 ```
 ## Run server
 ```
@@ -12,4 +14,9 @@ make
 ## Run Django shell
 ```
 make shell
+```
+## Run node
+```
+cd reeddit
+npm start
 ```
