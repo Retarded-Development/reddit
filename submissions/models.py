@@ -24,12 +24,21 @@ class Submission(models.Model):
 
 
 class Vote(models.Model):
+    UP = False
+    DOWN = False
+    VOTE_CHOICES = (
+        (UP, 'Up'),
+        (DOWN, 'Down'),
+    )
     user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
     create_at = models.DateTimeField(default=timezone.now)
+    vote_type = models.BooleanField(choices=VOTE_CHOICES)
+
 
     class Meta:
         db_table = "votes"
+        unique_together = ["user", "submission"]
 
     def __str__(self) -> str:
         return f"<{self.id}>"
