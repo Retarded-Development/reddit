@@ -37,11 +37,10 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     "users",
     "submissions",
     "rest_framework",
-    'djoser',
+    "djoser",
 ]
 
 MIDDLEWARE = [
@@ -67,9 +66,9 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
-            ],
+            ]
         },
-    },
+    }
 ]
 
 WSGI_APPLICATION = "reddit.wsgi.application"
@@ -94,11 +93,11 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
-    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",},
-    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",},
+    {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
 
 
@@ -124,6 +123,29 @@ STATIC_URL = "/static/"
 AUTH_USER_MODEL = "users.User"
 
 if DEBUG:
-    INSTALLED_APPS += [
-        "django_extensions",
-    ]
+    INSTALLED_APPS += ["django_extensions"]
+
+# djoser
+
+DJOSER = {
+    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}", # TODO
+    "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}", # TODO
+    "ACTIVATION_URL": "#/activate/{uid}/{token}", # TODO
+    "SEND_ACTIVATION_EMAIL": True,
+    "TOKEN_MODEL": None,  # we will use JWT
+    "SERIALIZERS": {
+        "user": "users.serializers.UserSerializer"
+    },
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": (
+        "rest_framework.permissions.AllowAny",
+    ),
+}
+
+SIMPLE_JWT = {"AUTH_HEADER_TYPES": ("JWT",)}
