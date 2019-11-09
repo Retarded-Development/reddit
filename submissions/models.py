@@ -27,14 +27,13 @@ class Vote(models.Model):
     UP = False
     DOWN = False
     VOTE_CHOICES = (
-        (UP, 'Up'),
-        (DOWN, 'Down'),
+        (UP, "Up"),
+        (DOWN, "Down"),
     )
     user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
     create_at = models.DateTimeField(default=timezone.now)
     vote_type = models.BooleanField(choices=VOTE_CHOICES)
-
 
     class Meta:
         db_table = "votes"
@@ -70,9 +69,9 @@ class Comment(models.Model):
 
 
 class Category(models.Model):
-    display_name = models.CharField(max_length=30)
-    title = models.CharField(max_length=600)
-    slug = models.CharField(max_length=30)
+    display_name = models.TextField()
+    title = models.TextField()
+    slug = models.TextField(unique=True)
     created_at = models.DateTimeField(default=timezone.now)
 
     class Meta:

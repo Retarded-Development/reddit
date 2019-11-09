@@ -3,3 +3,10 @@ create_db:
 
 shell:
 	python manage.py shell_plus
+
+reset_db:
+	python manage.py reset_db
+
+generate_test_data:
+	python manage.py migrate 
+	python manage.py runscript generate_test_data -v3
