@@ -71,3 +71,28 @@ class Category(models.Model):
 
     def __str__(self) -> str:
         return f"<{self.slug}>"
+
+
+class Notification(models.Model):
+    is_read = models.BooleanField(default=False)
+    to_user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        db_table = "notifications"
+
+    def __str__(self) -> str:
+        return f"<{self.submission_id}>"
+
+
+class Subscriptions(models.Model):
+    to_user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    created_at = models.DateTimeField(default=timezone.now)
+    submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        db_table = "subscriptions"
+
+    def __str__(self) -> str:
+        return f"<{self.submission_id}>"
