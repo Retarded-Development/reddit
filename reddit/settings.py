@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "users",
     "submissions",
     "rest_framework",
+    'djoser',
 ]
 
 MIDDLEWARE = [
