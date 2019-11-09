@@ -40,6 +40,7 @@ INSTALLED_APPS = [
 
     "users",
     "submissions",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [
