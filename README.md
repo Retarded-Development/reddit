@@ -1,8 +1,15 @@
 # Install dependencies
 #### Inside virtual enviroment:
-` pip install poetry`
-` poetry install`
+```
+pip install poetry
+poetry install```
 # Run server
-` make`
-` ./manage.py runserver`
+```
+make
+./manage.py runserver
+```
+# Run server
+```
+make shell
+```
 
