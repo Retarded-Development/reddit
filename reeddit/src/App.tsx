@@ -13,7 +13,7 @@ import { Navbar } from './components/Navbar';
 @inject('userStore', 'commonStore')
 @withRouter
 @observer
-export default App extends React.Component {
+export default class App extends React.Component {
 	componentWillMount() {
 		if (!this.props.commonStore.token) {
 		  this.props.commonStore.setAppLoaded();
