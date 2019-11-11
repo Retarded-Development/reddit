@@ -11,7 +11,7 @@ const LoginForm: React.FunctionComponent<{}> = observer(() => {
   const {register, handleSubmit, errors} = useForm();
 
   return (
-    <Form onSubmit={handleSubmit( data=>console.log(data))}>
+    <Form onSubmit={handleSubmit( data=>user.loginUser(data))}>
     <Form.Field>
       <label>Username</label>
       <input placeholder='Username' name="username" ref={register({ required: true })} />
