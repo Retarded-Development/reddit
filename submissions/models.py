@@ -1,9 +1,8 @@
 from django.db import models
 from django.utils import timezone
-
+from django.contrib.postgres.fields import ArrayField
 
 class Submission(models.Model):
-    author_name = models.CharField(null=False, max_length=12)
     author = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
     title = models.CharField(max_length=250)
@@ -48,7 +47,7 @@ class Comment(models.Model):
     submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
     parent = models.ForeignKey(
         "self",
-        related_name="children",
+        related_name="+",
         null=True,
         blank=True,
         db_index=True,
@@ -60,6 +59,8 @@ class Comment(models.Model):
     score = models.IntegerField(default=0)
     raw_comment = models.TextField(blank=True)
     html_comment = models.TextField(blank=True)
+    children_array = ArrayField(models.PositiveIntegerField(), default=tuple)
+    path = ArrayField(models.PositiveIntegerField(), default=tuple)
 
     class Meta:
         db_table = "comments"
