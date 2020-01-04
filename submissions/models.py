@@ -74,6 +74,7 @@ class Category(models.Model):
     title = models.TextField()
     slug = models.TextField(unique=True)
     created_at = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
 
     class Meta:
         db_table = "categories"
@@ -105,3 +106,12 @@ class Subscriptions(models.Model):
 
     def __str__(self) -> str:
         return f"<{self.submission_id}>"
+
+def upload_path_handler(instance, filename):
+    return "user_{id}/{file}".format(id=instance.user.id, file=filename)
+
+class Image(models.Model):
+    file = models.ImageField(upload_to=upload_path_handler)
+    user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    def __str__(self) -> str:
+        return f"<{self.id}>"

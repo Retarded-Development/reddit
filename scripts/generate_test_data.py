@@ -12,5 +12,6 @@ def run():
         factories.SubmissionFactory,
         factories.NotificationFactory,
     ]:
-        print(factory, len(factory.create_batch(10)))
+        print(factory)
+        print(len(factory.create_batch(10)))
     print("Done!")

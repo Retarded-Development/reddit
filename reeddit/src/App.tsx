@@ -4,7 +4,6 @@ import './App.css';
 import { types } from "mobx-state-tree"
 
 
-
 const App: React.FC = () => {
   return (
     <div className="App">

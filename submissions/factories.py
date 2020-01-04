@@ -19,7 +19,7 @@ class SubmissionFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = Submission
 
-    author_name = factory.Faker("first_name")
+    # author_name = factory.Faker("first_name")
     author = factory.SubFactory(UserFactory)
     category = factory.SubFactory(CategoryFactory)
 
