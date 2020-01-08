@@ -12,7 +12,7 @@ class Submission(models.Model):
     ups = models.IntegerField(default=0)
     downs = models.IntegerField(default=0)
     score = models.IntegerField(default=0)
-    create_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
     comment_count = models.IntegerField(default=0)
 
     class Meta:
@@ -31,7 +31,7 @@ class Vote(models.Model):
     )
     user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
-    create_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
     vote_type = models.BooleanField(choices=VOTE_CHOICES)
 
     class Meta:
@@ -53,7 +53,7 @@ class Comment(models.Model):
         db_index=True,
         on_delete=models.SET_NULL,
     )
-    create_at = models.DateTimeField(default=timezone.now)
+    created_at = models.DateTimeField(default=timezone.now)
     ups = models.IntegerField(default=0)
     downs = models.IntegerField(default=0)
     score = models.IntegerField(default=0)

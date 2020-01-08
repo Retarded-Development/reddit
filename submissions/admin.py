@@ -12,16 +12,16 @@ class SubmissionAdmin(admin.ModelAdmin):
         "ups",
         "downs",
         "score",
-        "create_at",
+        "created_at",
         "comment_count",
     )
-    list_filter = ("author", "category", "create_at")
+    list_filter = ("author", "category", "created_at")
 
 
 @admin.register(Vote)
 class VoteAdmin(admin.ModelAdmin):
-    list_display = ("id", "user", "submission", "create_at", "vote_type")
-    list_filter = ("user", "submission", "create_at", "vote_type")
+    list_display = ("id", "user", "submission", "created_at", "vote_type")
+    list_filter = ("user", "submission", "created_at", "vote_type")
 
 
 @admin.register(Comment)
@@ -31,14 +31,14 @@ class CommentAdmin(admin.ModelAdmin):
         "author",
         "submission",
         "parent",
-        "create_at",
+        "created_at",
         "ups",
         "downs",
         "score",
         "raw_comment",
         "html_comment",
     )
-    list_filter = ("author", "submission", "parent", "create_at")
+    list_filter = ("author", "submission", "parent", "created_at")
 
 
 @admin.register(Category)
