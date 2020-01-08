@@ -135,7 +135,7 @@ DJOSER = {
     "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}", # TODO
     "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}", # TODO
     "ACTIVATION_URL": "#/activate/{uid}/{token}", # TODO
-    "SEND_ACTIVATION_EMAIL": True,
+    "SEND_ACTIVATION_EMAIL": False,
     "TOKEN_MODEL": None,  # we will use JWT
     "SERIALIZERS": {
         "user": "users.serializers.UserSerializer"
@@ -157,3 +157,4 @@ SIMPLE_JWT = {
     "AUTH_HEADER_TYPES": ("JWT",),
     'AUDIENCE': "postgraphile",
 }
+EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'

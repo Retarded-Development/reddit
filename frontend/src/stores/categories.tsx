@@ -1,4 +1,5 @@
 import {flow, types} from "mobx-state-tree"
+import User from "./user";
 
 const Category = types.model("Category", {
   id: types.identifier,
@@ -6,12 +7,9 @@ const Category = types.model("Category", {
   title: types.optional(types.string, ""),
   slug: types.optional(types.string, ""),
   created_at: types.optional(types.Date, Date.now()),
-}).actions(self => ({
-  fetchCategories: flow(function* fetchCategories() {
+  author: types.maybeNull(types.reference(User)),
+});
 
-  })
-  })
-
-)
-
-export default Category;
+const Categories = types.model("Category", {
+});
+export default Categories;

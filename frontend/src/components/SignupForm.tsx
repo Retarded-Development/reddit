@@ -3,15 +3,18 @@ import { useStore } from "../stores";
 import { observer } from "mobx-react-lite";
 
 import { Button, Form } from 'semantic-ui-react'
-import useForm from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 
 const SignupForm: React.FunctionComponent<{}> = observer(() => {
   const { user } = useStore();
-  const {register, handleSubmit} = useForm();
-
+  const {register, handleSubmit, errors} = useForm({});
+  if (user.is_registered || user.is_logined || user.JWTtoken) {
+    return <div> Please login now! </div>
+  }
   return (
-    <Form onSubmit={handleSubmit(data=> console.log(data))}>
+    <Form onSubmit={handleSubmit(data=> user.registerUser(data))}>
+      <div><pre>{JSON.stringify(user.loading_errors, null, 2) }</pre></div>
     <Form.Field>
       <label>First Name</label>
       <input placeholder='First Name' ref={register} name="first_name" />
@@ -21,20 +24,24 @@ const SignupForm: React.FunctionComponent<{}> = observer(() => {
       <input placeholder='Last Name' ref={register} name="last_name" />
     </Form.Field>
       <Form.Field>
-      <label>Username</label>
+        <label>Email*</label>
+        <input placeholder='Last Name' ref={register} name="email" />
+      </Form.Field>
+      <Form.Field>
+      <label>Username*</label>
       <input placeholder='Username' ref={register} name="username" />
     </Form.Field>
       <Form.Field>
-      <label>Password</label>
+      <label>Password*</label>
       <input placeholder='Password' ref={register} name="password" />
     </Form.Field>
       <Form.Field>
-      <label>Password repeat</label>
+      <label>Password repeat*</label>
       <input placeholder='Password repeat' ref={register} name="password2" />
     </Form.Field>
     <Button type='submit'>Submit</Button>
   </Form>
   )
-})
+});
 
 export default SignupForm;
