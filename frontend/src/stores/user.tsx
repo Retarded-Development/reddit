@@ -10,7 +10,7 @@ const User = types.model("User", {
 
   loading: types.optional(types.boolean, false),
   loading_error: types.optional(types.string, ""),
-    loading_errors: types.frozen(),
+  loading_errors: types.frozen(),
 })
    .actions(self => ({
         loginUser: flow(function* loginUser(formData) { // <- note the star, this a generator function!
@@ -39,7 +39,7 @@ const User = types.model("User", {
                 self.is_logined = true;
                 self.loading = false;
             } catch (error) {
-                console.error("Failed to fetch projects", error)
+                console.error("Failed to fetch projects", error);
                 self.loading = false;
             }
         }),

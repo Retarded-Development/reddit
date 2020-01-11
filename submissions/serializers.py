@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from submissions.models import Category, Vote
+from submissions.models import Category, Vote, Submission
 from rest_framework import mixins
 
 
@@ -17,4 +17,10 @@ class VoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vote
+        fields = '__all__'
+
+
+class SubmissionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Submission
         fields = '__all__'

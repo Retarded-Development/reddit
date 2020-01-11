@@ -2,7 +2,7 @@ import React from 'react';
 import { useStore } from "../stores";
 import { observer } from "mobx-react-lite";
 
-import { Button, Form } from 'semantic-ui-react';
+import {Button, Dimmer, Form, Loader} from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
 
 
@@ -11,6 +11,11 @@ const LoginForm: React.FC<{}> = observer(() => {
   const { register, handleSubmit, errors } = useForm({});
   if (user.is_logined || user.JWTtoken) {
     return <div> User is already logined! </div>
+  }
+  if (user.loading){
+    return <Dimmer active>
+      <Loader />
+    </Dimmer>
   }
   return(
       <Form onSubmit={handleSubmit( data=>user.loginUser(data))}>

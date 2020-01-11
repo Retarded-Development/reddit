@@ -12,8 +12,7 @@ class FileUploadView(views.APIView):
     def post(self, request, *args, **kwargs):
         if not request.user.is_authenticated:
             image = Image()
-            # image.user = request.user
-            image.user_id = 1
+            image.user = request.user
             image.file = request.FILES['file']
             image.save()
             return Response(

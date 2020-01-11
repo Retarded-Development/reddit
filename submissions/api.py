@@ -1,6 +1,6 @@
 from rest_framework import mixins, viewsets, permissions
-from submissions.serializers import CategorySerializer, VoteSerializer
-from submissions.models import Category, Vote
+from submissions.serializers import CategorySerializer, VoteSerializer, SubmissionSerializer
+from submissions.models import Category, Vote, Submission
 
 from submissions.permissions import IsAdminOrIsSelf, IsAdminOrReadonly
 from rest_framework.viewsets import ModelViewSet
@@ -20,3 +20,10 @@ class VotesViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.Gene
 
     def get_queryset(self):
         return Vote.objects.all()
+
+class SubmissionViewSet(viewsets.ModelViewSet):
+    serializer_class = SubmissionSerializer
+    permission_classes = [IsAdminOrReadonly]
+
+    def get_queryset(self):
+        return Submission.objects.all()
