@@ -63,8 +63,10 @@ const Categories = types.model("Category", {
           const data = yield response.json();
           data.created_at = new Date(data.created_at);
           console.log(data);
-          const category = Category.create(data);
-          self.byId.set(id, category);
+          if ('id' in data){
+            const category = Category.create(data);
+            self.byId.set(id, category);
+          };
           self.loading = false;
 
         } catch (error) {

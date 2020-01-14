@@ -10,11 +10,11 @@ const Category: React.FC<{}> = observer(() => {
     useEffect(() => {
         categories.getById(id);
     }, []);
-    if (categories.loading){
-        return <Loader />
-    }
     let category = categories.byId.get(String(id));
     if (!category){
+        if (categories.loading){
+            return <Loader />
+        }
         return <h2> Not found </h2>
     }
     return (

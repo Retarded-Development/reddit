@@ -3,7 +3,7 @@ import User from "./user"
 import {types, Instance, unprotect, castToSnapshot} from "mobx-state-tree";
 
 import { useContext, createContext } from "react";
-import Submissions from "./submissions";
+import {Submissions} from "./submissions";
 
 import { cast } from "mobx-state-tree";
 import { Category, Categories} from "../stores/categories";

@@ -1,5 +1,4 @@
-import {flow, types} from "mobx-state-tree"
-import {type} from "os";
+import {types} from "mobx-state-tree";
 import Comment from "./comments";
 
 const Submission = types.model("Submission", {
@@ -21,4 +20,4 @@ const Submissions = types.model("Submissions", {
 });
 
 
-export default Submissions;
+export { Submission, Submissions };
