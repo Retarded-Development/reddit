@@ -10,7 +10,7 @@ const CategoriesList: React.FC<{}> = observer(() => {
     const items = categories.cats;
     return (
     <List>
-        {items.map((item) => <List.Item key={item.id}>
+        {items.map((item: any) => <List.Item key={item.id}>
                 <Link to={Links.Category + String(item.id)}> {item.display_name}</Link>
         </List.Item>)}
     </List>)
