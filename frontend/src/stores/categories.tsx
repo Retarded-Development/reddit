@@ -17,7 +17,6 @@ type CategoryType = Instance<typeof Category>;
 
 const Categories = types.model("Category", {
   cats: types.array(Category),
-  // @ts-ignore
   byId: types.map(Category),
   // items: types.optional(types.map(Category), {}),
   loading: types.optional(types.boolean, false),
@@ -37,15 +36,11 @@ const Categories = types.model("Category", {
             },
           });
           const data = yield response.json();
-
           console.log(data);
           data.forEach(
               (element:any) => element.created_at = new Date(element.created_at)
           );
           self.cats.push(...data);
-
-          // self.cats.map(item => self.byId.set(String(item.id), item));
-
         } catch (error) {
           console.error("Failed to fetch projects", error);
         }

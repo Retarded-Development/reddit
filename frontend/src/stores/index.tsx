@@ -28,18 +28,12 @@ export const createStore = (): RootStoreModel => {
     loading_error: "",
     loading_errors: cast({})
   });
-
   const submissions = Submissions.create({});
-  // const categoryMapType:Instance<typeof Category> = castToSnapshot({});
-  const categories = Categories.create();
-  unprotect(categories);
+  const categories = Categories.create({cats:[], byId: {}});
   categories.getAll();
-
-  // window.user = user;
-  // create more store instances here
+  
   // @ts-ignore
-  const rootStore = RootStore.create({ user, submissions, categories });
-  return rootStore;
+  return RootStore.create({ user, submissions, categories });
 };
 
 // context to pass in compenents
