@@ -1,7 +1,13 @@
 import {flow, types} from "mobx-state-tree"
+import {Submission} from "./submissions";
 
-const User = types.model("User", {
-  id: types.identifier,
+const MinimalUser = types.model("MinimalUser", {
+    id: types.identifierNumber,
+    username: types.optional(types.string, ""),
+});
+
+const UserStore = types.model("UserStore", {
+  id: types.maybe(types.identifierNumber),
   email: types.optional(types.string, ""),
   username: types.optional(types.string, ""),
   is_logined: types.optional(types.boolean, false),
@@ -70,7 +76,4 @@ const User = types.model("User", {
 
        })
     }));
-
-
-
-export default User;
+export {UserStore, MinimalUser};

@@ -1,8 +1,8 @@
 enum Links {
-    Login = "/login",
-    Signup = "/signup",
-    Categories = "/categories",
+    Login = "/login/",
+    Signup = "/signup/",
+    Categories = "/categories/",
     Category = "/category/",
-    Submission = "/submission",
+    Submission = "/submission/",
 }
 export default Links;

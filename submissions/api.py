@@ -12,7 +12,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
     serializer_class = CategorySerializer
     permission_classes = [IsAdminOrReadonly]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', ]
+    filterset_fields = ['id', 'slug']
     
     def get_queryset(self):
         return Category.objects.all()
@@ -29,7 +29,7 @@ class SubmissionViewSet(viewsets.ModelViewSet):
     serializer_class = SubmissionSerializer
     permission_classes = [IsAdminOrReadonly]
     filter_backends = [DjangoFilterBackend]
-    filterset_fields = ['id', 'category', 'author']
+    filterset_fields = ['id', 'category', 'author', "category__slug"]
 
     def get_queryset(self):
         return Submission.objects.all()

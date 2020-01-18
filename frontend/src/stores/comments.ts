@@ -1,11 +1,9 @@
 import {flow, types} from "mobx-state-tree"
-import User from "./user";
+import {MinimalUser} from "./user";
 
 const Comment = types.model("Comment", {
-    id: types.identifier,
-    author: types.reference(User),
-    parent: types.maybeNull(types.integer),
-    children_array: types.maybeNull(types.array(types.integer)),
+    id: types.identifierNumber,
+    author: types.maybeNull(types.reference(MinimalUser)),
     raw_comment: types.optional(types.string, ""),
     html_comment: types.optional(types.string, ""),
     ups: types.optional(types.integer, 0),
