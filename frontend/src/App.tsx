@@ -14,6 +14,7 @@ import {
 } from "react-router-dom";
 import Links from "./enums";
 import Category from "./components/Category";
+import {Submission} from "./components/Submission";
 
 const App: React.FC = () => {
   return (
@@ -45,6 +46,9 @@ const App: React.FC = () => {
             </Route>
             <Route path={Links.Category+':id'}>
               <Category />
+            </Route>
+            <Route path={Links.Submission+':id'}>
+              <Submission />
             </Route>
           </Switch>
         </Container>

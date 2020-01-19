@@ -47,13 +47,6 @@ const CategoryStore = types
         }
 
         if ("id" in data) {
-          // if (data.author === {}){
-          //     data.author = null;
-          // };
-          // if (data.author){
-          //     const author = MinimalUser.create(data.author);
-          //     data.author = author.id;
-          // }
           self.category = Category.create(data);
 
         }
