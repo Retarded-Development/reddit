@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './App.css';
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
-import { Container, Menu, MenuItem, MenuMenu } from 'semantic-ui-react'
+import { Container, Menu, MenuItem, MenuMenu, Button } from 'semantic-ui-react'
 import CategoriesList from "./components/CategoriesList";
 
 
@@ -18,31 +18,16 @@ import {Submission} from "./components/Submission";
 import {observer} from "mobx-react-lite";
 import {useStore} from "./stores";
 
-function Greeting(user: any) {
-    if (user.is_logined) {
-        return (
-            <MenuMenu position='right'>
-                <MenuItem>
-                    <Link to={Links.Signup}>Signup</Link>
-                </MenuItem>
-                <MenuItem>
-                    <Link to={Links.Login}>Login</Link>
-                </MenuItem>
-            </MenuMenu>
-        );
-    }
-
-    return (
-        <MenuMenu position='right'>
-            <MenuItem>
-                Hello {user.username}
-            </MenuItem>
-        </MenuMenu>
-    );
-}
 
 const App: React.FunctionComponent<{}> = observer(() => {
-    const { user } = useStore();
+  const { user } = useStore();
+  useEffect(() => {
+      const token = localStorage.getItem('JWT');
+      if (token){
+          user.setJWT(token);
+          console.log('token', token);
+      }
+  }, []);
 
   return (
     <Router>
@@ -50,7 +35,20 @@ const App: React.FunctionComponent<{}> = observer(() => {
           <MenuItem>
             <Link to={Links.Categories}>Categories</Link>
           </MenuItem>
-            {Greeting(user)}
+            {
+                user.is_logined?<MenuMenu position='right'>
+                    <MenuItem>
+                        <Button onClick={()=>user.logout()}> Logout </Button>
+                    </MenuItem>
+                </MenuMenu>:<MenuMenu position='right'>
+                    <MenuItem>
+                        <Link to={Links.Signup}>Signup</Link>
+                    </MenuItem>
+                    <MenuItem>
+                        <Link to={Links.Login}>Login</Link>
+                    </MenuItem>
+                </MenuMenu>
+            }
         </Menu>
         <Container text>
           <Switch>

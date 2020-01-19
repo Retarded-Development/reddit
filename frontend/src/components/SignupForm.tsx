@@ -21,7 +21,7 @@ const SignupForm: React.FunctionComponent<{}> = observer(() => {
   return (
     <Container>
       <Form onSubmit={handleSubmit(data=> user.registerUser(data))}>
-        <div><pre>{JSON.stringify(user.loading_errors, null, 2) }</pre></div>
+        <div><pre>{JSON.stringify(user.loading_errors, null, 2)}</pre></div>
       <Form.Field>
         <label>First Name</label>
         <input placeholder='First Name' ref={register} name="first_name" />

@@ -156,7 +156,8 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60*24),
-    "AUTH_HEADER_TYPES": ("JWT",),
-    'AUDIENCE': "postgraphile",
+    # "AUTH_HEADER_TYPES": ("JWT",),
+    # 'AUDIENCE': "postgraphile",
 }
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
+CORS_ORIGIN_ALLOW_ALL = True

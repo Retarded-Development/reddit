@@ -19,6 +19,14 @@ const UserStore = types.model("UserStore", {
   loading_errors: types.frozen(),
 })
    .actions(self => ({
+        setJWT: function (token: string) {
+            self.JWTtoken = token;
+            self.is_logined = true;
+        },
+        logout: function(){
+            delete self.JWTtoken;
+            self.is_logined = false;
+        },
         loginUser: flow(function* loginUser(formData) { // <- note the star, this a generator function!
             self.loading = true;
             console.log(formData);
@@ -38,11 +46,14 @@ const UserStore = types.model("UserStore", {
                 // self. = formData.username
                 console.log(data);
                 if(data.hasOwnProperty('detail')){
-                    self.loading_error = data.detail;
+                    self.loading_errors = data.detail;
                 } else {
                     self.JWTtoken = data.access;
+                    localStorage.setItem('JWT', data.access);
+                    self.is_logined = true;
+                    self.is_logined = true;
                 }
-                self.is_logined = true;
+
                 self.loading = false;
             } catch (error) {
                 console.error("Failed to fetch projects", error);
@@ -53,7 +64,7 @@ const UserStore = types.model("UserStore", {
            console.log(formData);
            self.loading = true;
            try {
-               const response = yield fetch("/api/users/", {
+               const response = yield fetch("/api/users/?format=json", {
                    method: 'POST',
                    headers: {
                        'Accept': 'application/json',
@@ -66,7 +77,7 @@ const UserStore = types.model("UserStore", {
                if(data.hasOwnProperty('id')){
                    self.is_registered = true;
                } else {
-                   self.loading_errors = Object.freeze(data);
+                   self.loading_errors = Object.freeze(data.detail);
                }
                self.loading = false;
            } catch (error) {

@@ -19,14 +19,16 @@ const LoginForm: React.FC<{}> = observer(() => {
   // }
   return(
       <Form onSubmit={handleSubmit( data=>user.loginUser(data))}>
-    <Form.Field>
+        <div><pre>{JSON.stringify(user.loading_errors, null, 2)}</pre></div>
+
+        <Form.Field>
       <label>Username</label>
       <input placeholder='Username' name="username" ref={register({ required: true })} />
       {errors.username && 'Username is required.'}
     </Form.Field>
     <Form.Field>
       <label>Password</label>
-      <input placeholder='Password' name="password" ref={register({ required: true })} />
+      <input placeholder='Password' name="password" type="password" ref={register({ required: true })} />
       {errors.password && 'Password is required.'}
     </Form.Field>
     <Button type='submit'>Submit</Button>
