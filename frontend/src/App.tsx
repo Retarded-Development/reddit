@@ -2,7 +2,7 @@ import React from 'react';
 import './App.css';
 import LoginForm from "./components/LoginForm";
 import SignupForm from "./components/SignupForm";
-import { Container } from 'semantic-ui-react'
+import { Container, Menu, MenuItem, MenuMenu } from 'semantic-ui-react'
 import CategoriesList from "./components/CategoriesList";
 
 
@@ -19,20 +19,19 @@ import {Submission} from "./components/Submission";
 const App: React.FC = () => {
   return (
     <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
+        <Menu>
+          <MenuItem>
+            <Link to={Links.Categories}>Categories</Link>
+          </MenuItem>
+          <MenuMenu position='right'>
+            <MenuItem>
               <Link to={Links.Signup}>Signup</Link>
-            </li>
-            <li>
+            </MenuItem>
+            <MenuItem>
               <Link to={Links.Login}>Login</Link>
-            </li>
-            <li>
-              <Link to={Links.Categories}>Categories</Link>
-            </li>
-          </ul>
-        </nav>
+            </MenuItem>
+          </MenuMenu>
+        </Menu>
         <Container text>
           <Switch>
             <Route path={Links.Login}>
@@ -52,7 +51,6 @@ const App: React.FC = () => {
             </Route>
           </Switch>
         </Container>
-      </div>
     </Router>
   );
 };
