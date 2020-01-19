@@ -78,6 +78,7 @@ class Category(models.Model):
 
     class Meta:
         db_table = "categories"
+        ordering = ['created_at', ]
 
     def __str__(self) -> str:
         return f"<{self.slug}>"

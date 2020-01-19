@@ -83,16 +83,18 @@ const CategoryStore = types
 const CategoriesStore = types
   .model("CategoriesStore", {
     cats: types.array(Category),
+    curent_page: types.optional(types.integer, 1),
+    total: types.optional(types.integer, 10),
     loading: types.optional(types.boolean, false),
     loading_error: types.optional(types.string, ""),
     loading_errors: types.frozen()
   })
   .actions(self => ({
-    getAll: flow(function* getAll() {
+    getAll: flow(function* getAll(page=1) {
       // <- note the star, this a generator function!
       console.log("getAll()");
       try {
-        const response = yield fetch("/api/categories/", {
+        const response = yield fetch("/api/categories/?page="+ String(page), {
           method: "get",
           headers: {
             Accept: "application/json",
@@ -104,6 +106,8 @@ const CategoriesStore = types
           (element: any) => (element.created_at = new Date(element.created_at))
         );
         self.cats = data.results;
+        self.total = data.count;
+        console.log(data);
       } catch (error) {
         console.error("Failed to fetch projects", error);
       }
