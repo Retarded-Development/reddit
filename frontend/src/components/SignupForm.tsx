@@ -13,11 +13,11 @@ const SignupForm: React.FunctionComponent<{}> = observer(() => {
   if (user.is_registered || user.is_logined || user.JWTtoken) {
     return <div> Please login now! </div>
   }
-  if (user.loading){
-    return <Dimmer active>
-      <Loader />
-    </Dimmer>
-  }
+  // if (user.loading){
+  //   return <Dimmer active>
+  //     <Loader />
+  //   </Dimmer>
+  // }
   return (
     <Container>
       <Form onSubmit={handleSubmit(data=> user.registerUser(data))}>

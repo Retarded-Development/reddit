@@ -12,11 +12,11 @@ const LoginForm: React.FC<{}> = observer(() => {
   if (user.is_logined || user.JWTtoken) {
     return <div> User is already logined! </div>
   }
-  if (user.loading){
-    return <Dimmer active>
-      <Loader />
-    </Dimmer>
-  }
+  // if (user.loading){
+  //   return <Dimmer active>
+  //     <Loader />
+  //   </Dimmer>
+  // }
   return(
       <Form onSubmit={handleSubmit( data=>user.loginUser(data))}>
     <Form.Field>

@@ -15,22 +15,42 @@ import {
 import Links from "./enums";
 import Category from "./components/Category";
 import {Submission} from "./components/Submission";
+import {observer} from "mobx-react-lite";
+import {useStore} from "./stores";
 
-const App: React.FC = () => {
+function Greeting(user: any) {
+    if (user.is_logined) {
+        return (
+            <MenuMenu position='right'>
+                <MenuItem>
+                    <Link to={Links.Signup}>Signup</Link>
+                </MenuItem>
+                <MenuItem>
+                    <Link to={Links.Login}>Login</Link>
+                </MenuItem>
+            </MenuMenu>
+        );
+    }
+
+    return (
+        <MenuMenu position='right'>
+            <MenuItem>
+                Hello {user.username}
+            </MenuItem>
+        </MenuMenu>
+    );
+}
+
+const App: React.FunctionComponent<{}> = observer(() => {
+    const { user } = useStore();
+
   return (
     <Router>
         <Menu>
           <MenuItem>
             <Link to={Links.Categories}>Categories</Link>
           </MenuItem>
-          <MenuMenu position='right'>
-            <MenuItem>
-              <Link to={Links.Signup}>Signup</Link>
-            </MenuItem>
-            <MenuItem>
-              <Link to={Links.Login}>Login</Link>
-            </MenuItem>
-          </MenuMenu>
+            {Greeting(user)}
         </Menu>
         <Container text>
           <Switch>
@@ -53,6 +73,6 @@ const App: React.FC = () => {
         </Container>
     </Router>
   );
-};
+});
 
 export default App;
