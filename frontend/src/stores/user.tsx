@@ -4,6 +4,7 @@ import {Submission} from "./submissions";
 const MinimalUser = types.model("MinimalUser", {
     id: types.identifierNumber,
     username: types.optional(types.string, ""),
+    gravatar_url: "",
 });
 
 const UserStore = types.model("UserStore", {
@@ -46,7 +47,7 @@ const UserStore = types.model("UserStore", {
                 // self. = formData.username
                 console.log(data);
                 if(data.hasOwnProperty('detail')){
-                    self.loading_errors = data.detail;
+                    self.loading_error = data.detail;
                 } else {
                     self.JWTtoken = data.access;
                     localStorage.setItem('JWT', data.access);
@@ -77,7 +78,8 @@ const UserStore = types.model("UserStore", {
                if(data.hasOwnProperty('id')){
                    self.is_registered = true;
                } else {
-                   self.loading_errors = Object.freeze(data.detail);
+                   console.log(data.detail);
+                   self.loading_errors = data.detail;
                }
                self.loading = false;
            } catch (error) {

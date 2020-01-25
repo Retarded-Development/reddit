@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Button, Comment, Form, Header, List, Loader} from 'semantic-ui-react'
+import {Button, Comment, Form, Header, List, Loader, Pagination} from 'semantic-ui-react'
 import {observer} from "mobx-react-lite";
 import {useStore} from "../stores";
 import {Link, useParams} from "react-router-dom";
@@ -23,13 +23,32 @@ const Category: React.FC<{}> = observer(() => {
     if (category.loading){
         return <Loader />
     }
+
     if (!category.category){
         return <h2> Not found </h2>
-    };
+    }
+
+    let total_pages = Math.floor(category.total/10);
+    if (category.total%10 !== 0){
+        total_pages = total_pages +1;
+    }
 
     return (
         <div>
             {category.category.display_name}
+            <br/>
+            {total_pages>1?
+            <Pagination
+                defaultActivePage={category.curent_page}
+                firstItem={null}
+                lastItem={null}
+                pointing
+                secondary
+                onPageChange={(event, data)=> category.getById(id, data.activePage)}
+                totalPages={total_pages}
+            />:''
+            }
+
             <Segment.Group>
                 {category.submissions.map((submission: SubmissionType) =>
                     <Segment key={submission.id} style={{display: "flex", flexDirection: "row" }}>

@@ -4,7 +4,7 @@ import { MinimalUser } from "./user";
 import { Instance } from "mobx-state-tree";
 import axios from "axios";
 import { Submission } from "./submissions";
-import Comment from "./comments";
+import {Comment} from "./comments";
 import { getEnabledCategories } from "trace_events";
 import { RootStore } from "./rootStore";
 
@@ -25,12 +25,14 @@ const CategoryStore = types
     loading: types.optional(types.boolean, false),
     loading_error: types.optional(types.string, ""),
     loading_errors: types.frozen(),
+    curent_page: types.optional(types.integer, 1),
+    total: types.optional(types.integer, 10),
     submissions: types.late(() => types.optional(types.array(Submission), []))
   })
   .actions(self => ({
-    getById: flow(function* getById(id) {
+    getById: flow(function* getById(id, page=1) {
       try {
-        self.loading = true;
+        // self.loading = true;
         const response = yield fetch("/api/categories/?slug=" + id, {
           method: "GET",
           headers: {
@@ -47,11 +49,11 @@ const CategoryStore = types
         }
 
         if ("id" in data) {
-          self.category = Category.create(data);
+          self.category = data;
 
         }
         const response2 = yield fetch(
-          "/api/submissions/?category__slug=" + id,
+          "/api/submissions/?category__slug=" + id + "&page=" + String(page),
           {
             method: "GET",
             headers: {
@@ -62,7 +64,6 @@ const CategoryStore = types
         );
         const dataJson2 = yield response2.json();
         let data2 = dataJson2.results;
-        console.log(data2);
         data2.forEach(function(element: any) {
           element.created_at = new Date(element.created_at);
           if (element.category) {
@@ -71,6 +72,8 @@ const CategoryStore = types
         });
         self.submissions = data2;
         self.loading = false;
+        self.total = dataJson2.count;
+
       } catch (error) {
         console.error("Failed to fetch projects", error);
         self.loading_error = error;

@@ -59,8 +59,8 @@ class Comment(models.Model):
     score = models.IntegerField(default=0)
     raw_comment = models.TextField(blank=True)
     html_comment = models.TextField(blank=True)
-    children_array = ArrayField(models.PositiveIntegerField(), default=tuple)
-    path = ArrayField(models.PositiveIntegerField(), default=tuple)
+    # children_array = ArrayField(models.PositiveIntegerField(), default=tuple)
+    # path = ArrayField(models.PositiveIntegerField(), default=tuple)
 
     class Meta:
         db_table = "comments"
@@ -92,6 +92,7 @@ class Notification(models.Model):
 
     class Meta:
         db_table = "notifications"
+        ordering = ['created_at', ]
 
     def __str__(self) -> str:
         return f"<{self.submission_id}>"
@@ -103,6 +104,7 @@ class Subscriptions(models.Model):
     submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
 
     class Meta:
+        ordering = ['created_at', ]
         db_table = "subscriptions"
 
     def __str__(self) -> str:

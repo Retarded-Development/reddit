@@ -2,7 +2,7 @@ import React from 'react';
 import { useStore } from "../stores";
 import { observer } from "mobx-react-lite";
 
-import { Button, Form, Dimmer, Loader} from 'semantic-ui-react'
+import {Button, Form, Dimmer, Loader, Icon, Message} from 'semantic-ui-react'
 import { useForm } from "react-hook-form";
 import { Container } from 'semantic-ui-react'
 
@@ -18,10 +18,24 @@ const SignupForm: React.FunctionComponent<{}> = observer(() => {
   //     <Loader />
   //   </Dimmer>
   // }
+    console.log(user.loading_errors);
+  let errorMessages = '';
+  if (user.loading_errors){
+
+    let errorMessages = Object.keys(user.loading_errors).map(function(key) {
+        return ( <Message attached='top' warning>
+            <Icon name='help'/>
+            {key}: {user.loading_errors[key]}
+        </Message> )
+    });
+  }
   return (
     <Container>
+        {user.loading_errors?errorMessages:''}
+
       <Form onSubmit={handleSubmit(data=> user.registerUser(data))}>
         <div><pre>{JSON.stringify(user.loading_errors, null, 2)}</pre></div>
+
       <Form.Field>
         <label>First Name</label>
         <input placeholder='First Name' ref={register} name="first_name" />

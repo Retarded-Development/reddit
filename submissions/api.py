@@ -1,5 +1,5 @@
 from rest_framework import mixins, viewsets, permissions
-from submissions.serializers import CategorySerializer, VoteSerializer, SubmissionSerializer
+from submissions.serializers import CategorySerializer, VoteSerializer, SubmissionSerializer, CommentSerializer
 from submissions.models import Category, Vote, Submission, Comment
 
 from submissions.permissions import IsAdminOrIsSelf, IsAdminOrReadonly
@@ -40,7 +40,7 @@ class SubmissionViewSet(viewsets.ModelViewSet):
         return Submission.objects.all()
 
 class CommentViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet):
-    serializer_class = VoteSerializer
+    serializer_class = CommentSerializer
     permission_classes = [IsAdminOrReadonly]
     filter_backends = [DjangoFilterBackend]
 

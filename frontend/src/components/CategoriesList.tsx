@@ -17,6 +17,7 @@ const CategoriesList: React.FC<{}> = observer(() => {
         total_pages = total_pages +1;
     }
     return (<div>
+            {total_pages>1?
             <Pagination
                 defaultActivePage={categories.curent_page}
                 firstItem={null}
@@ -25,7 +26,8 @@ const CategoriesList: React.FC<{}> = observer(() => {
                 secondary
                 onPageChange={(event, data)=> categories.getAll(data.activePage)}
                 totalPages={total_pages}
-            />
+            />:''
+            }
     <Segment.Group>
         {items.map((item: any) => <Segment key={item.id}>
                 <Link to={Links.Category + item.slug}> {item.display_name}</Link>

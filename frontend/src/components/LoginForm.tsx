@@ -4,6 +4,7 @@ import { observer } from "mobx-react-lite";
 
 import {Button, Dimmer, Form, Loader} from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
+import { Icon, Message } from 'semantic-ui-react'
 
 
 const LoginForm: React.FC<{}> = observer(() => {
@@ -18,8 +19,8 @@ const LoginForm: React.FC<{}> = observer(() => {
   //   </Dimmer>
   // }
   return(
+      <div>
       <Form onSubmit={handleSubmit( data=>user.loginUser(data))}>
-        <div><pre>{JSON.stringify(user.loading_errors, null, 2)}</pre></div>
 
         <Form.Field>
       <label>Username</label>
@@ -32,8 +33,13 @@ const LoginForm: React.FC<{}> = observer(() => {
       {errors.password && 'Password is required.'}
     </Form.Field>
     <Button type='submit'>Submit</Button>
-        {user.loading_error}
       </Form>
+          <br />
+          {user.loading_error?<Message attached='bottom' warning>
+            <Icon name='help'/>
+                {user.loading_error}
+            </Message>:""}
+        </div>
 )
 });
 
