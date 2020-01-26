@@ -5,12 +5,16 @@ import SignupForm from "./components/SignupForm";
 import { Container, Menu, MenuItem, MenuMenu, Button } from 'semantic-ui-react'
 import CategoriesList from "./components/CategoriesList";
 
+import { History } from 'history';
+import history from './history';
 
 import {
-    BrowserRouter as Router,
+    Router,
     Switch,
     Route,
-    Link
+    Link,
+    RouteComponentProps,
+    withRouter 
 } from "react-router-dom";
 import Links from "./enums";
 import Category from "./components/Category";
@@ -18,6 +22,7 @@ import {Submission} from "./components/Submission";
 import {observer} from "mobx-react-lite";
 import {useStore} from "./stores";
 
+class RouterWithHistory extends React.Component<{history: History}, {}> {};
 
 const App: React.FunctionComponent<{}> = observer(() => {
   const { user } = useStore();
@@ -30,7 +35,7 @@ const App: React.FunctionComponent<{}> = observer(() => {
   }, []);
 
   return (
-    <Router>
+    <RouterWithHistory history={history}>
         <Menu>
           <MenuItem>
             <Link to={Links.Categories}>Categories</Link>
@@ -69,7 +74,7 @@ const App: React.FunctionComponent<{}> = observer(() => {
             </Route>
           </Switch>
         </Container>
-    </Router>
+    </RouterWithHistory>
   );
 });
 

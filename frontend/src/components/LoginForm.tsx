@@ -1,6 +1,7 @@
 import React from 'react';
 import { useStore } from "../stores";
 import { observer } from "mobx-react-lite";
+import history from '../history';
 
 import {Button, Dimmer, Form, Loader} from 'semantic-ui-react';
 import { useForm } from "react-hook-form";
@@ -11,6 +12,7 @@ const LoginForm: React.FC<{}> = observer(() => {
   const { register, handleSubmit, errors } = useForm({});
   if (user.is_logined || user.JWTtoken) {
     return <div> User is already logined! </div>
+    //history.push('/') // <-- should be used like this
   }
   // if (user.loading){
   //   return <Dimmer active>
