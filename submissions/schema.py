@@ -1,26 +1,29 @@
 import graphene
-
-from graphene_django.types import DjangoObjectType
+from django import forms
 from graphene import relay
 from graphene_django.filter import DjangoFilterConnectionField
+from graphene_django.forms.mutation import DjangoModelFormMutation
+from graphene_django.types import DjangoObjectType
 
-from submissions.models import Category, Submission, Vote, Comment, Notification, Follow, CommentVote
+from submissions.models import (
+    Category,
+    Comment,
+    CommentVote,
+    Follow,
+    Notification,
+    Submission,
+    Vote,
+)
 from users.models import User
+
 
 class CategoryType(DjangoObjectType):
     class Meta:
         model = Category
         # filter_fields = ["id", "slug", "submissions"]
-        filter_fields = {
-            'id': ['exact'],
-            'slug': ['exact'],
-            'submissions__id': ['gte']
-        }
+        filter_fields = {"id": ["exact"], "slug": ["exact"], "submissions__id": ["gte"]}
         interfaces = (relay.Node,)
         exclude = []
-
-
-
 
 
 class SubmissionType(DjangoObjectType):
@@ -41,7 +44,7 @@ class SubmissionType(DjangoObjectType):
 class CommentType(DjangoObjectType):
     class Meta:
         model = Comment
-        fields = ['id']
+        fields = ["id"]
         interfaces = (relay.Node,)
         filter_fields = {}
 
@@ -49,7 +52,7 @@ class CommentType(DjangoObjectType):
 class VoteType(DjangoObjectType):
     class Meta:
         model = Vote
-        fields = ['id']
+        fields = ["id"]
         interfaces = (relay.Node,)
         filter_fields = {}
 
@@ -57,7 +60,7 @@ class VoteType(DjangoObjectType):
 class NotificationType(DjangoObjectType):
     class Meta:
         model = Notification
-        fields = ['id']
+        fields = ["id"]
         interfaces = (relay.Node,)
         filter_fields = {}
 
@@ -65,7 +68,7 @@ class NotificationType(DjangoObjectType):
 class UserType(DjangoObjectType):
     class Meta:
         model = User
-        fields = ['id', 'bio', 'location', 'username']
+        fields = ["id", "bio", "location", "username"]
         interfaces = (relay.Node,)
         filter_fields = {}
 
@@ -73,7 +76,7 @@ class UserType(DjangoObjectType):
 class FollowType(DjangoObjectType):
     class Meta:
         model = Follow
-        fields = ['id', 'submission']
+        fields = ["id", "submission"]
         interfaces = (relay.Node,)
         filter_fields = {}
 
@@ -128,7 +131,7 @@ class Query(object):
         return Submission.objects.all()
 
     def resolve_all_notifications(self, info, **kwargs):
-        return Notification.objects.filter(to_user=info.context.user)
+        return Notification.objects.filter(to_user=info.context.user, is_read=False)
 
     def resolve_submission(self, info, **kwargs):
         id = kwargs.get("id")
@@ -154,20 +157,26 @@ class Query(object):
         return Vote.objects.filter(user=info.context.user.id)
 
     def resolve_my_downvoted_submissions(self, info, **kwargs):
-        return Submission.objects.filter(votes__user=info.context.user.id, votes__vote_type=Vote.DOWN)
+        return Submission.objects.filter(
+            votes__user=info.context.user.id, votes__vote_type=Vote.DOWN
+        )
 
     def resolve_my_voted_submissions(self, info, **kwargs):
-        return Submission.objects.filter(votes__user=info.context.user.id, votes__vote_type=Vote.UP)
-
+        return Submission.objects.filter(
+            votes__user=info.context.user.id, votes__vote_type=Vote.UP
+        )
 
 
 class VoteSubmissionMutation(graphene.Mutation):
     class Arguments:
         submission_id = graphene.ID(required=True)
+
     submission_id = graphene.ID(required=True)
 
     def mutate(self, info, submission_id):
-        created, obj = Vote.objects.get_or_create(submission_id=submission_id, user_id=info.context.user.id, vote_type=Vote.UP)
+        created, obj = Vote.objects.get_or_create(
+            submission_id=submission_id, user_id=info.context.user.id, vote_type=Vote.UP
+        )
         if not created:
             obj.vote_type = Vote.UP
             obj.save()
@@ -177,10 +186,15 @@ class VoteSubmissionMutation(graphene.Mutation):
 class DownVoteSubmissionMutation(graphene.Mutation):
     class Arguments:
         submission_id = graphene.ID(required=True)
+
     submission_id = graphene.ID(required=True)
 
     def mutate(self, info, submission_id):
-        created, obj = Vote.objects.get_or_create(submission_id=submission_id, user_id=info.context.user.id, vote_type=Vote.DOWN)
+        created, obj = Vote.objects.get_or_create(
+            submission_id=submission_id,
+            user_id=info.context.user.id,
+            vote_type=Vote.DOWN,
+        )
 
         if not created:
             obj.vote_type = Vote.DOWN
@@ -195,7 +209,9 @@ class VoteCommentMutation(graphene.Mutation):
     comment_id = graphene.ID(required=True)
 
     def mutate(self, info, comment_id):
-        created, obj = CommentVote.objects.get_or_create(comment_id=comment_id, user_id=info.context.user.id, vote_type=Vote.UP)
+        created, obj = CommentVote.objects.get_or_create(
+            comment_id=comment_id, user_id=info.context.user.id, vote_type=Vote.UP
+        )
         if not created:
             obj.vote_type = Vote.UP
             obj.save()
@@ -233,21 +249,18 @@ class NotificationMarkAsReadMutation(graphene.Mutation):
             obj.save()
         return NotificationMarkAsReadMutation(notification_id=notification_id)
 
-from graphene_django.forms.mutation import DjangoModelFormMutation
-from django import forms
-
 
 class CategoryForm(forms.ModelForm):
     class Meta:
         model = Category
-        fields = ('display_name', 'slug', 'title')
+        fields = ("display_name", "slug", "title")
 
 
 class OnlyOwnObjects(object):
     @classmethod
     def perform_mutate(cls, form, info):
         obj = form.save()
-        setattr(obj, cls.user_field,  info.context.user)
+        setattr(obj, cls.user_field, info.context.user)
         obj.save()
         kwargs = {cls._meta.return_field_name: obj}
         return cls(errors=[], **kwargs)
@@ -257,9 +270,11 @@ class OnlyOwnObjects(object):
         kwargs = {"data": input}
         pk = input.pop("id", None)
         if pk:
-            instance = cls._meta.model._default_manager.filter(**{'pk': pk, cls.user_field: info.context.user}).first()
+            instance = cls._meta.model._default_manager.filter(
+                **{"pk": pk, cls.user_field: info.context.user}
+            ).first()
             if not instance:
-                kwargs['data']['id'] = None
+                kwargs["data"]["id"] = None
             kwargs["instance"] = instance
         return kwargs
 
@@ -270,14 +285,13 @@ class CategoryMutation(OnlyOwnObjects, DjangoModelFormMutation):
     class Meta:
         form_class = CategoryForm
 
-    user_field = 'author'
-
+    user_field = "author"
 
 
 class CommentForm(forms.ModelForm):
     class Meta:
         model = Comment
-        fields = ('submission', 'parent', 'raw_comment')
+        fields = ("submission", "parent", "raw_comment")
 
 
 class CommentMutation(OnlyOwnObjects, DjangoModelFormMutation):
@@ -286,15 +300,13 @@ class CommentMutation(OnlyOwnObjects, DjangoModelFormMutation):
     class Meta:
         form_class = CommentForm
 
-    user_field = 'author'
-
-
+    user_field = "author"
 
 
 class SubmissionForm(forms.ModelForm):
     class Meta:
         model = Submission
-        fields = ('category', 'title', 'url', 'text')
+        fields = ("category", "title", "url", "text")
 
 
 class SubmissionMutation(OnlyOwnObjects, DjangoModelFormMutation):
@@ -303,27 +315,27 @@ class SubmissionMutation(OnlyOwnObjects, DjangoModelFormMutation):
     class Meta:
         form_class = SubmissionForm
 
-    user_field = 'author'
-
+    user_field = "author"
 
 
 class Mutation(graphene.ObjectType):
     mutate_category = CategoryMutation.Field()
-#     delete_category
-#
+    #     delete_category
+    #
     mutate_comment = CommentMutation.Field()
-#     delete_comment
-#
+    #     delete_comment
+    #
     mutate_submission = SubmissionMutation.Field()
-#     delete_submission
-#
+    #     delete_submission
+    #
     vote_submission = VoteSubmissionMutation.Field()
     downvote_submission = DownVoteSubmissionMutation.Field()
     vote_comment = VoteCommentMutation.Field()
     downvote_comment = DownVoteCommentMutation.Field()
     notification_mark_as_read = NotificationMarkAsReadMutation.Field()
+
+
 #     hide_user
 #     hide_comment
 #     follow_user
 #   subscribe_to_submission
-
