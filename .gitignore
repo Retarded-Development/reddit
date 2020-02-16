@@ -106,3 +106,4 @@ venv.bak/
 # govnode modules
 node_modules
 
+.idea

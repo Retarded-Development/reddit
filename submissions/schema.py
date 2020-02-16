@@ -1,9 +1,14 @@
 import graphene
 from django import forms
 from graphene import relay
+from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from graphene_django.forms.mutation import DjangoModelFormMutation
-from graphene_django.types import DjangoObjectType
+from graphene_django_extras import (
+    DjangoFilterPaginateListField,
+    DjangoListObjectType,
+    DjangoSerializerType,
+)
 
 from submissions.models import (
     Category,
@@ -22,16 +27,24 @@ class CategoryType(DjangoObjectType):
         model = Category
         # filter_fields = ["id", "slug", "submissions"]
         filter_fields = {"id": ["exact"], "slug": ["exact"], "submissions__id": ["gte"]}
-        interfaces = (relay.Node,)
+
+        exclude = []
+
+
+class UserListType(DjangoListObjectType):
+    class Meta:
+        model = Category
+        # filter_fields = ["id", "slug", "submissions"]
+        filter_fields = {"id": ["exact"], "slug": ["exact"], "submissions__id": ["gte"]}
+
         exclude = []
 
 
 class SubmissionType(DjangoObjectType):
     class Meta:
         model = Submission
-        interfaces = (relay.Node,)
         filter_fields = {}
-        # fields = ('id', 'title')
+
         exclude = []
 
     # @classmethod
@@ -44,16 +57,16 @@ class SubmissionType(DjangoObjectType):
 class CommentType(DjangoObjectType):
     class Meta:
         model = Comment
-        fields = ["id"]
-        interfaces = (relay.Node,)
-        filter_fields = {}
+        exclude = []
+
+        filter_fields = ("submission",)
 
 
 class VoteType(DjangoObjectType):
     class Meta:
         model = Vote
         fields = ["id"]
-        interfaces = (relay.Node,)
+
         filter_fields = {}
 
 
@@ -61,7 +74,7 @@ class NotificationType(DjangoObjectType):
     class Meta:
         model = Notification
         fields = ["id"]
-        interfaces = (relay.Node,)
+
         filter_fields = {}
 
 
@@ -69,7 +82,7 @@ class UserType(DjangoObjectType):
     class Meta:
         model = User
         fields = ["id", "bio", "location", "username"]
-        interfaces = (relay.Node,)
+
         filter_fields = {}
 
 
@@ -77,8 +90,13 @@ class FollowType(DjangoObjectType):
     class Meta:
         model = Follow
         fields = ["id", "submission"]
-        interfaces = (relay.Node,)
+
         filter_fields = {}
+
+
+Field = relay.node.Field
+
+DjangoFilterConnectionField = DjangoFilterPaginateListField
 
 
 class Query(object):
@@ -88,11 +106,11 @@ class Query(object):
     all_votes = DjangoFilterConnectionField(VoteType)
     all_notifications = DjangoFilterConnectionField(NotificationType)
     all_users = DjangoFilterConnectionField(UserType)
-
-    user = relay.node.Field(UserType, id=graphene.Int(), username=graphene.String())
-    me = relay.node.Field(UserType)
-    category = relay.node.Field(CategoryType, id=graphene.Int(), slug=graphene.String())
-
+    #
+    user = Field(UserType, id=graphene.Int(), username=graphene.String())
+    me = Field(UserType)
+    category = Field(CategoryType, id=graphene.Int(), slug=graphene.String())
+    #
     my_categories = DjangoFilterConnectionField(CategoryType)
     my_submissions = DjangoFilterConnectionField(SubmissionType)
     replied_submissions = DjangoFilterConnectionField(SubmissionType)
@@ -101,7 +119,7 @@ class Query(object):
     my_downvoted_submissions = DjangoFilterConnectionField(SubmissionType)
     my_voted_submissions = DjangoFilterConnectionField(VoteType)
 
-    submission = relay.node.Field(SubmissionType, id=graphene.Int())
+    submission = Field(SubmissionType, id=graphene.Int())
 
     def resolve_followed_submissions(self, info, **kwargs):
         return Submission.objects.filter(followers__user=info.context.user)
@@ -136,7 +154,7 @@ class Query(object):
     def resolve_submission(self, info, **kwargs):
         id = kwargs.get("id")
         if id:
-            return Category.objects.get(pk=id)
+            return Submission.objects.get(pk=id)
 
     def resolve_category(self, info, **kwargs):
         id = kwargs.get("id")

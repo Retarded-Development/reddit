@@ -31,7 +31,7 @@ class PrivateGraphQLView(LoginRequiredMixin, GraphQLView):
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("graphql", csrf_exempt(GraphQLView.as_view(graphiql=True))),
-    # path('api/', include('submissions.urls')),
+    path('api/', include('submissions.urls')),
     path('api/', include('djoser.urls')),
     path('api/', include('djoser.urls.jwt')),
     path('api/', include('submissions.views')),

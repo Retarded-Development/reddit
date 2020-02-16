@@ -199,7 +199,7 @@ python-versions = "*"
 version = "1.1.1"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Web APIs for Django, made easy."
 name = "djangorestframework"
 optional = false
@@ -310,6 +310,22 @@ six = ">=1.10.0"
 dev = ["black (19.3b0)", "flake8 (3.7.7)", "flake8-black (0.1.0)", "flake8-bugbear (19.3.0)", "pytest (>=3.6.3)", "pytest-cov", "coveralls", "mock", "pytz", "pytest-django (>=3.3.2)", "djangorestframework (>=3.6.3)", "django-filter (<2)", "django-filter (>=2)"]
 rest_framework = ["djangorestframework (>=3.6.3)"]
 test = ["pytest (>=3.6.3)", "pytest-cov", "coveralls", "mock", "pytz", "pytest-django (>=3.3.2)", "djangorestframework (>=3.6.3)", "django-filter (<2)", "django-filter (>=2)"]
+
+[[package]]
+category = "main"
+description = "This library add some extra funcionalities to graphene-django to facilitate the graphql use without Relay, allow paginations and filtering integration and add some extra directives"
+name = "graphene-django-extras"
+optional = false
+python-versions = ">=3.6,<4.0"
+version = "0.4.8"
+
+[package.dependencies]
+django-filter = ">=2.2.0,<3.0.0"
+djangorestframework = "*"
+graphene = ">=2.1.8,<3.0.0"
+graphene-django = ">=2.5.0,<3.0.0"
+graphql-core = ">=2.2.1,<3.0.0"
+python-dateutil = ">=2.8.0,<3.0.0"
 
 [[package]]
 category = "main"
@@ -538,7 +554,7 @@ isort = ">=4.2.5,<5"
 mccabe = ">=0.6,<0.7"
 
 [[package]]
-category = "dev"
+category = "main"
 description = "Extensions to the standard Python datetime module"
 name = "python-dateutil"
 optional = false
@@ -640,7 +656,7 @@ python-versions = "*"
 version = "1.11.2"
 
 [metadata]
-content-hash = "2fc4637fa0319d571d221e599777024d46df1dfeaf086aa479b0990525b96fad"
+content-hash = "bc44794c3675e84d383bfedc9e231fed68ce95fbfc8974b380a9500d4b0977bb"
 python-versions = "^3.7"
 
 [metadata.files]
@@ -799,6 +815,10 @@ graphene = [
 graphene-django = [
     {file = "graphene-django-2.8.1.tar.gz", hash = "sha256:6e64bc9df1e4d4be247aedc63f61047cae673156198e433110bf87ae2d072a83"},
     {file = "graphene_django-2.8.1-py2.py3-none-any.whl", hash = "sha256:b9d63d2225e656ecfd42a4a2f38b9b263720d51974badb82aaf5b3f1df7acb5d"},
+]
+graphene-django-extras = [
+    {file = "graphene-django-extras-0.4.8.tar.gz", hash = "sha256:5bf2348c9d0850f7db919637ce4c6b4410666d911f02ca91db9217960c06aabc"},
+    {file = "graphene_django_extras-0.4.8-py3-none-any.whl", hash = "sha256:a91b4e9bf0593f4bf03ff0f3d148e3a6e83d917147b2fbd7e56548d067597e8d"},
 ]
 graphql-core = [
     {file = "graphql-core-2.3.1.tar.gz", hash = "sha256:74a8f509ae8c4a58271f5d6b46d5c75b4aed116821ab62dea252d8041bfe057a"},
