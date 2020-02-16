@@ -3,8 +3,8 @@ from django.utils import timezone
 from django.contrib.postgres.fields import ArrayField
 
 class Submission(models.Model):
-    author = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
-    category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, related_name='submissions')
+    category = models.ForeignKey("Category", on_delete=models.SET_NULL, null=True, related_name='submissions')
     title = models.CharField(max_length=250)
     url = models.URLField(null=True, blank=True)
     text = models.TextField(max_length=5000, blank=True)
@@ -30,7 +30,7 @@ class Vote(models.Model):
         (DOWN, "Down"),
     )
     user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
-    submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
+    submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True, related_name='votes')
     created_at = models.DateTimeField(default=timezone.now)
     vote_type = models.BooleanField(choices=VOTE_CHOICES)
 
@@ -42,9 +42,42 @@ class Vote(models.Model):
         return f"<{self.id}>"
 
 
+class CommentVote(models.Model):
+    UP = False
+    DOWN = False
+    VOTE_CHOICES = (
+        (UP, "Up"),
+        (DOWN, "Down"),
+    )
+    user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    comment = models.ForeignKey('Comment', on_delete=models.SET_NULL, null=True, related_name='votes')
+    created_at = models.DateTimeField(default=timezone.now)
+    vote_type = models.BooleanField(choices=VOTE_CHOICES)
+
+    class Meta:
+        db_table = "comment_votes"
+        unique_together = ["user", "comment"]
+
+    def __str__(self) -> str:
+        return f"<{self.id}>"
+
+
+class Follow(models.Model):
+    user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, related_name='following')
+    to_user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, related_name='followers')
+    created_at = models.DateTimeField(default=timezone.now)
+
+    class Meta:
+        db_table = "submission_follow"
+        unique_together = ["user", "to_user"]
+
+    def __str__(self) -> str:
+        return f"<{self.id}>"
+
+
 class Comment(models.Model):
     author = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
-    submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
+    submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True, related_name='comments')
     parent = models.ForeignKey(
         "self",
         related_name="+",
@@ -74,7 +107,7 @@ class Category(models.Model):
     title = models.TextField()
     slug = models.TextField(unique=True)
     created_at = models.DateTimeField(default=timezone.now)
-    author = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, related_name='categories')
 
     class Meta:
         db_table = "categories"
@@ -86,7 +119,7 @@ class Category(models.Model):
 
 class Notification(models.Model):
     is_read = models.BooleanField(default=False)
-    to_user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    to_user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, related_name='notifications')
     created_at = models.DateTimeField(default=timezone.now)
     submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
 
@@ -99,9 +132,9 @@ class Notification(models.Model):
 
 
 class Subscriptions(models.Model):
-    to_user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
+    to_user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True, related_name='subscriptions')
     created_at = models.DateTimeField(default=timezone.now)
-    submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True)
+    submission = models.ForeignKey(Submission, on_delete=models.SET_NULL, null=True, related_name='subscriptions')
 
     class Meta:
         ordering = ['created_at', ]
@@ -118,3 +151,5 @@ class Image(models.Model):
     user = models.ForeignKey("users.User", on_delete=models.SET_NULL, null=True)
     def __str__(self) -> str:
         return f"<{self.id}>"
+
+#TODO saved hiden

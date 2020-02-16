@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    'graphene_django',
     "users",
     "submissions",
     "rest_framework",
@@ -161,3 +162,7 @@ SIMPLE_JWT = {
 }
 EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend'
 CORS_ORIGIN_ALLOW_ALL = True
+
+GRAPHENE = {
+    'SCHEMA': 'reddit.schema.schema'
+}
